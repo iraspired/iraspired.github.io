@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iraspired</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+        h1 {
+            color: #ff0000;
+        }
+        .stats {
+            background-color: #1e1e1e;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            width: 300px;
+        }
+        .loading {
+            color: #888;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            margin: 10px 0;
+        }
+        a {
+            color: #ff0000;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Iraspired YouTube Stats</h1>
+    <div class="stats">
+        <p>Subscribers: <span id="subCount" class="loading">Loading...</span></p>
+        <h2>Latest 3 Shorts Views</h2>
+        <ul id="shortsList">
+            <li class="loading">Loading...</li>
+        </ul>
+    </div>
+
+    <script>
+        const API_KEY = 'AIzaSyC6Kmr_m3xvPkDVkWPQ9yj0r8GLKPhph8c';
+        const CHANNEL_ID = 'UCFRfiSd-COg9owgVLoY0PAQ';
+        const UPDATE_INTERVAL = 60000;
+
+        async function fetchYouTubeData() {
+            try {
+                // Step 1: Fetch channel details for sub count
+                const channelResponse = await fetch(
+                    `https://www.googleapis.com/youtube/v3/channels?part=statistics&id=${CHANNEL_ID}&key=${API_KEY}`
+                );
+                const channelData = await channelResponse.json();
+                const subCount = channelData.items[0].statistics.subscriberCount;
+                document.getElementById('subCount').textContent = subCount.toLocaleString();
+
+                // Step 2: Fetch latest videos (uploads playlist)
+                const playlistResponse = await fetch(
+                    `https://www.googleapis.com/youtube/v3/channels?part=contentDetails&id=${CHANNEL_ID}&key=${API_KEY}`
+                );
+                const playlistData = await playlistResponse.json();
+                const uploadsPlaylistId = playlistData.items[0].contentDetails.relatedPlaylists.uploads;
+
+                // Fetch latest 10 videos (to ensure we get at least 3 Shorts)
+                const videosResponse = await fetch(
+                    `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${uploadsPlaylistId}&maxResults=10&key=${API_KEY}`
+                );
+                const videosData = await videosResponse.json();
+
+                // Step 3: Fetch details for each video to get duration and views
+                const videoIds = videosData.items.map(item => item.snippet.resourceId.videoId).join(',');
+                const detailsResponse = await fetch(
+                    `https://www.googleapis.com/youtube/v3/videos?part=statistics,contentDetails&id=${videoIds}&key=${API_KEY}`
+                );
+                const detailsData = await detailsResponse.json();
+
+                // Filter Shorts (duration < 60s) and get top 3 latest
+                const shorts = [];
+                videosData.items.forEach((item, index) => {
+                    const videoDetails = detailsData.items
