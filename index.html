@@ -1,98 +1,154 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iraspired</title>
-    <style>
-        body {
-            background-color: #121212;
-            color: #ffffff;
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            padding: 20px;
-            text-align: center;
-        }
-        h1 {
-            color: #ff0000;
-        }
-        .stats {
-            background-color: #1e1e1e;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-            width: 300px;
-        }
-        .loading {
-            color: #888;
-        }
-        ul {
-            list-style: none;
-            padding: 0;
-        }
-        li {
-            margin: 10px 0;
-        }
-        a {
-            color: #ff0000;
-            text-decoration: none;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Social Hub</title>
+  <style>
+    body {
+      background-color: #0f0f0f;
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      background-color: #1a1a1a;
+      border-bottom: 1px solid #2a2a2a;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 700;
+      font-size: 1.2rem;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: #ddd;
+      font-size: 1rem;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover {
+      color: #00ff90;
+    }
+    .search-bar input {
+      background: #2a2a2a;
+      border: none;
+      padding: 0.4rem 0.8rem;
+      border-radius: 6px;
+      color: #fff;
+    }
+    .connections {
+      display: flex;
+      gap: 1rem;
+      overflow-x: auto;
+      padding: 1rem 2rem;
+    }
+    .connections a {
+      text-decoration: none;
+      color: #fff;
+      text-align: center;
+    }
+    .connections img {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      border: 3px solid #2b2b2b;
+      object-fit: cover;
+      transition: 0.3s;
+    }
+    .connections img:hover {
+      transform: scale(1.1);
+      border-color: #00ff90;
+    }
+    .connections span {
+      display: block;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+    }
+    .section-title {
+      margin: 2rem;
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+    .embeds {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1rem;
+      padding: 0 2rem 2rem 2rem;
+    }
+    .embed-card {
+      background: #1c1c1c;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+    .embed-card iframe {
+      width: 100%;
+      height: 400px;
+      border: none;
+    }
+  </style>
 </head>
 <body>
-    <h1>Iraspired YouTube Stats</h1>
-    <div class="stats">
-        <p>Subscribers: <span id="subCount" class="loading">Loading...</span></p>
-        <h2>Latest 3 Shorts Views</h2>
-        <ul id="shortsList">
-            <li class="loading">Loading...</li>
-        </ul>
+  <header>
+    <div class="logo">⬜ MyHub</div>
+    <nav class="nav-links">
+      <a href="#">Charts</a>
+      <a href="#">Marketplace</a>
+      <a href="#">Create</a>
+      <a href="#">Socials</a>
+    </nav>
+    <div class="search-bar">
+      <input type="text" placeholder="Search..." />
     </div>
+  </header>
 
-    <script>
-        const API_KEY = 'AIzaSyC6Kmr_m3xvPkDVkWPQ9yj0r8GLKPhph8c';
-        const CHANNEL_ID = 'UCFRfiSd-COg9owgVLoY0PAQ';
-        const UPDATE_INTERVAL = 60000;
+  <section>
+    <h2 class="section-title">Connections</h2>
+    <div class="connections">
+      <a href="https://twitter.com" target="_blank">
+        <img src="https://via.placeholder.com/70" alt="Twitter Profile" />
+        <span>Twitter</span>
+      </a>
+      <a href="https://instagram.com" target="_blank">
+        <img src="https://via.placeholder.com/70" alt="Instagram Profile" />
+        <span>Instagram</span>
+      </a>
+      <a href="https://tiktok.com" target="_blank">
+        <img src="https://via.placeholder.com/70" alt="TikTok Profile" />
+        <span>TikTok</span>
+      </a>
+      <a href="https://youtube.com" target="_blank">
+        <img src="https://via.placeholder.com/70" alt="YouTube Channel" />
+        <span>YouTube</span>
+      </a>
+    </div>
+  </section>
 
-        async function fetchYouTubeData() {
-            try {
-                // Step 1: Fetch channel details for sub count
-                const channelResponse = await fetch(
-                    `https://www.googleapis.com/youtube/v3/channels?part=statistics&id=${CHANNEL_ID}&key=${API_KEY}`
-                );
-                const channelData = await channelResponse.json();
-                const subCount = channelData.items[0].statistics.subscriberCount;
-                document.getElementById('subCount').textContent = subCount.toLocaleString();
-
-                // Step 2: Fetch latest videos (uploads playlist)
-                const playlistResponse = await fetch(
-                    `https://www.googleapis.com/youtube/v3/channels?part=contentDetails&id=${CHANNEL_ID}&key=${API_KEY}`
-                );
-                const playlistData = await playlistResponse.json();
-                const uploadsPlaylistId = playlistData.items[0].contentDetails.relatedPlaylists.uploads;
-
-                // Fetch latest 10 videos (to ensure we get at least 3 Shorts)
-                const videosResponse = await fetch(
-                    `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${uploadsPlaylistId}&maxResults=10&key=${API_KEY}`
-                );
-                const videosData = await videosResponse.json();
-
-                // Step 3: Fetch details for each video to get duration and views
-                const videoIds = videosData.items.map(item => item.snippet.resourceId.videoId).join(',');
-                const detailsResponse = await fetch(
-                    `https://www.googleapis.com/youtube/v3/videos?part=statistics,contentDetails&id=${videoIds}&key=${API_KEY}`
-                );
-                const detailsData = await detailsResponse.json();
-
-                // Filter Shorts (duration < 60s) and get top 3 latest
-                const shorts = [];
-                videosData.items.forEach((item, index) => {
-                    const videoDetails = detailsData.items
+  <section>
+    <h2 class="section-title">Today's Picks</h2>
+    <div class="embeds">
+      <div class="embed-card">
+        <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
+      </div>
+      <div class="embed-card">
+        <iframe src="https://twitter.com/Interior/status/463440424141459456?ref_src=twsrc%5Etfw" allowfullscreen></iframe>
+      </div>
+      <div class="embed-card">
+        <iframe src="https://www.instagram.com/p/C1A2B3C4D5E/embed" allowfullscreen></iframe>
+      </div>
+    </div>
+  </section>
+</body>
+</html>
