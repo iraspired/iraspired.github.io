@@ -1,147 +1,356 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Connections Section</title>
-<style>
-  body {
-    background-color: #181818;
-    color: white;
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 40px;
-    overflow-x: hidden;
-  }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Daveyblox</title>
 
-  /* ----- Connections Row ----- */
-  .connections {
-    display: flex;
-    gap: 50px;
-    position: relative;
-    z-index: 1;
-  }
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" sizes="32x32" href="https://raw.githubusercontent.com/iraspired/iraspired.github.io/refs/heads/main/davey%20blox%20logo%20blue.png">
+  <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/iraspired/iraspired.github.io/refs/heads/main/davey%20blox%20logo%20blue.png">
 
-  .connection {
-    text-align: center;
-    position: relative;
-  }
+  <style>
+    /* ====== Global ====== */
+    :root {
+      --bg: #0f0f0f;
+      --header: #1a1a1a;
+      --muted: #aaa;
+      --accent: #00b3ff;
+      --card: #1c1c1c;
+      --hover-card: #1a1a1a;
+    }
+    html,body{height:100%;margin:0;}
+    body{
+      font-family: Inter, system-ui, Arial, sans-serif;
+      background:var(--bg);
+      color:#fff;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
 
-  .connection img {
-    width: 90px;
-    height: 90px;
-    border-radius: 50%;
-  }
+    /* ====== Header ====== */
+    header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      background:var(--header);
+      padding:0.45rem 1rem;
+      border-bottom:1px solid #262626;
+      box-sizing:border-box;
+      height:56px;
+    }
 
-  .connection-name {
-    margin-top: 8px;
-    font-weight: 500;
-    text-decoration: underline;
-    cursor: pointer;
-  }
+    /* left area: hamburger + logo + links */
+    .header-left{
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
 
-  /* ----- Hover Card ----- */
-  .hover-zone {
-    position: relative;
-    display: inline-block;
-  }
+    .hamburger{
+      font-size:18px;
+      color:#d0d0d0;
+      cursor:pointer;
+      line-height:1;
+      user-select:none;
+      padding:6px;
+    }
 
-  .hover-card {
-    position: absolute;
-    top: 100%; /* directly below avatar/name */
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: #242424;
-    border-radius: 8px;
-    width: 180px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-    transition: opacity 0.25s ease, transform 0.25s ease;
-    transform-origin: top center;
-    z-index: 1000;
-  }
+    .brand-logo{
+      width:28px;
+      height:28px;
+      object-fit:contain;
+      display:block;
+    }
 
-  /* Keep card visible while hovering either name/avatar or the card itself */
-  .hover-zone:hover .hover-card {
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
-    transform: translateX(-50%) translateY(6px);
-  }
+    .nav-links{
+      display:flex;
+      gap:18px;
+      margin-left:6px;
+      align-items:center;
+    }
 
-  .hover-card button {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: none;
-    border: none;
-    color: white;
-    font-size: 15px;
-    padding: 12px 16px;
-    width: 100%;
-    text-align: left;
-    cursor: pointer;
-    transition: background-color 0.2s;
-  }
+    .nav-links a{
+      color:#fff;
+      text-decoration:none;
+      font-weight:500;
+      font-size:15px;
+      line-height:1;
+      transition:color .12s ease;
+    }
 
-  .hover-card button:hover {
-    background-color: #323232;
-  }
+    .nav-links a:hover{ color:var(--accent); }
 
-  .hover-card svg {
-    width: 18px;
-    height: 18px;
-    fill: white;
-  }
+    /* center area: search centered */
+    .header-center{
+      flex:1;
+      display:flex;
+      justify-content:center; /* centers search box */
+      align-items:center;
+      pointer-events:none; /* allow clicks to pass to children only */
+    }
 
-  /* Prevent scroll caused by absolute elements */
-  .connections {
-    overflow: visible;
-  }
+    .search-box{
+      pointer-events:auto;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      background:#2b2b2b;
+      padding:6px 10px;
+      border-radius:8px;
+      min-width:220px;
+      max-width:420px;
+      width:34%;
+    }
 
-  /* Example other content (Today’s Picks) */
-  .todays-picks {
-    background-color: #202020;
-    margin-top: 80px;
-    height: 400px;
-    border-radius: 10px;
-    padding: 20px;
-    position: relative;
-    z-index: 0;
-  }
-</style>
+    .search-box svg{ width:16px;height:16px; fill:var(--muted); flex:0 0 16px; }
+    .search-box input{
+      background:transparent;
+      border:0;
+      outline:0;
+      color:#fff;
+      font-size:14px;
+      width:100%;
+    }
+
+    /* right area icons */
+    .header-right{
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+    .header-icon{
+      width:20px;height:20px;filter:invert(1);opacity:.95;cursor:pointer;
+    }
+
+    /* ====== Main content spacing ====== */
+    main{ padding:18px 20px 48px 20px; box-sizing:border-box; }
+
+    .section-title{
+      margin: 10px 4px 6px 4px; /* tightened spacing */
+      font-size:18px;
+      font-weight:600;
+      color:#fff;
+    }
+
+    /* ====== Connections row ====== */
+    .connections-row{
+      display:flex;
+      gap:18px;
+      padding:10px 6px 18px 6px;
+      align-items:flex-start;
+      overflow-x:auto;
+      overflow-y:visible; /* allow hover-cards to show */
+    }
+
+    /* each connection tile */
+    .connection{
+      width:92px;
+      text-align:center;
+      position:relative; /* anchor for hover-card */
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:6px;
+      flex:0 0 auto;
+    }
+
+    .hover-zone{
+      /* hover-zone wraps avatar+name so there is no gap */
+      display:inline-block;
+      cursor:pointer;
+      user-select:none;
+      text-align:center;
+      position:relative;
+    }
+
+    .avatar{
+      width:84px;height:84px;border-radius:50%;object-fit:cover;border:3px solid #2b2b2b;display:block;
+      transition:transform .16s ease, border-color .16s ease;
+      background:#e6e6e6;
+    }
+
+    .connection-name{
+      margin-top:4px;
+      font-size:13px;
+      color:#fff;
+      text-decoration:underline;
+    }
+
+    .hover-zone:hover .avatar{ transform:scale(1.03); border-color: #373737; }
+
+    /* ====== Hover card (floating) ====== */
+    .hover-card{
+      position:absolute;
+      top: calc(100% + 8px); /* directly below hover-zone, no gap for mouse travel */
+      left:50%;
+      transform:translateX(-50%) translateY(-6px);
+      width:200px;
+      background:var(--hover-card);
+      border:1px solid #2a2a2a;
+      border-radius:9px;
+      box-shadow:0 8px 22px rgba(0,0,0,0.6);
+      padding:6px 6px;
+      opacity:0;
+      visibility:hidden;
+      pointer-events:none;
+      transition:opacity .22s ease, transform .22s ease, visibility .22s;
+      z-index:9999; /* ensure above everything */
+      transform-origin:top center;
+    }
+
+    /* Keep visible while hovering the hover-zone OR the hover-card itself */
+    .hover-zone:hover + .hover-card,
+    .hover-card:hover{
+      opacity:1;
+      visibility:visible;
+      pointer-events:auto;
+      transform:translateX(-50%) translateY(6px);
+    }
+
+    /* buttons inside hover-card */
+    .hover-card button{
+      width:100%;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      background:transparent;
+      border:0;
+      color:#ddd;
+      padding:10px 12px;
+      border-radius:6px;
+      text-align:left;
+      cursor:pointer;
+      font-size:14px;
+    }
+
+    .hover-card button:hover{ background:#2a2a2a; color:#fff; }
+
+    /* ====== Embeds / Today's picks ====== */
+    .embeds-grid{
+      display:grid;
+      grid-template-columns: repeat(auto-fit,minmax(300px,1fr));
+      gap:12px;
+      margin-top:6px;
+    }
+
+    .embed-card{
+      background:var(--card);
+      border-radius:10px;
+      padding:8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+      min-height:120px;
+    }
+
+    /* Ensure the picks area doesn't create a stacking context that clips hover cards */
+    .picks-wrapper{
+      position:relative;
+      z-index:1;
+      margin-top:6px;
+    }
+
+    /* ====== Responsive tweaks ====== */
+    @media (max-width:900px){
+      .search-box{ width:44%; min-width:180px; }
+      .nav-links{ display:none; } /* collapse nav links on small screens */
+    }
+    @media (max-width:520px){
+      .search-box{ width:64%; }
+      header{padding:8px;}
+    }
+  </style>
 </head>
 <body>
+  <!-- HEADER -->
+  <header>
+    <div class="header-left">
+      <div class="hamburger" aria-hidden="true">☰</div>
+      <img class="brand-logo" src="https://raw.githubusercontent.com/iraspired/iraspired.github.io/refs/heads/main/davey%20blox%20logo%20(1).png" alt="Daveyblox">
+      <!-- nav links immediately after logo -->
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="#">Charts</a>
+        <a href="#">Marketplace</a>
+        <a href="#">Create</a>
+        <a href="#">Robux</a>
+      </nav>
+    </div>
 
-<div class="connections">
-  <div class="connection">
-    <div class="hover-zone">
-      <img src="https://tr.rbxcdn.com/180DAY-AvatarHeadshot-420x420.png" alt="SoftyDoom">
-      <div class="connection-name">SoftyDoom</div>
-      <div class="hover-card">
-        <button><svg viewBox="0 0 24 24"><path d="M4 4h16v2H4zm0 6h16v2H4zm0 6h16v2H4z"/></svg> Chat with SoftyDoom</button>
-        <button><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-3.33 0-10 1.67-10 5v3h20v-3c0-3.33-6.67-5-10-5z"/></svg> View Profile</button>
+    <div class="header-center">
+      <div class="search-box" role="search" aria-label="Search">
+        <!-- search svg -->
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="11" cy="11" r="7.2" stroke="none" fill="none"></circle>
+          <path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+          <!-- using fill via CSS color -->
+        </svg>
+        <input type="search" placeholder="Search" />
       </div>
     </div>
-  </div>
 
-  <div class="connection">
-    <div class="hover-zone">
-      <img src="https://tr.rbxcdn.com/180DAY-AvatarHeadshot-420x420.png" alt="Syrakyooz">
-      <div class="connection-name">Syrakyooz</div>
-      <div class="hover-card">
-        <button><svg viewBox="0 0 24 24"><path d="M4 4h16v2H4zm0 6h16v2H4zm0 6h16v2H4z"/></svg> Chat with Syrakyooz</button>
-        <button><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-3.33 0-10 1.67-10 5v3h20v-3c0-3.33-6.67-5-10-5z"/></svg> View Profile</button>
+    <div class="header-right">
+      <img class="header-icon" src="https://cdn-icons-png.flaticon.com/512/1827/1827349.png" alt="notifications">
+      <img class="header-icon" src="https://cdn-icons-png.flaticon.com/512/3524/3524659.png" alt="settings">
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main>
+    <!-- Connections -->
+    <h2 class="section-title">Connections</h2>
+    <div class="connections-row" aria-label="Connections">
+      <!-- Connection 1 -->
+      <div class="connection">
+        <div class="hover-zone" tabindex="0" aria-describedby="profile-softy">
+          <img class="avatar" src="https://pbs.twimg.com/profile_images/1977007667479543808/20AQn_27_400x400.jpg" alt="Davey Baszucki">
+          <div class="connection-name">Davey Baszucki</div>
+        </div>
+        <!-- hover-card placed as sibling to hover-zone; visible while hovering either zone or card -->
+        <div class="hover-card" id="profile-softy" role="dialog" aria-label="Davey Baszucki actions">
+          <button type="button" onclick="window.open('https://x.com/parodybaszucki','_blank')">🔗 View Profile</button>
+        </div>
+      </div>
+
+      <!-- Connection 2 -->
+      <div class="connection">
+        <div class="hover-zone" tabindex="0" aria-describedby="profile-matt">
+          <img class="avatar" src="https://pbs.twimg.com/profile_images/1977045376369635329/YIlgyqR__400x400.jpg" alt="Matty Kaufman">
+          <div class="connection-name">Matty Kaufman</div>
+        </div>
+        <div class="hover-card" id="profile-matt" role="dialog" aria-label="Matty Kaufman actions">
+          <button type="button" onclick="window.open('https://x.com/parodykaufman','_blank')">🔗 View Profile</button>
+        </div>
+      </div>
+
+      <!-- Connection 3 -->
+      <div class="connection">
+        <div class="hover-zone" tabindex="0" aria-describedby="profile-archive">
+          <img class="avatar" src="https://pbs.twimg.com/profile_images/1977702490742079488/d1eQ-M_V_400x400.jpg" alt="Davey Archive">
+          <div class="connection-name">Davey Archive</div>
+        </div>
+        <div class="hover-card" id="profile-archive" role="dialog" aria-label="Davey Archive actions">
+          <button type="button" onclick="window.open('https://x.com/daveyarchive','_blank')">🔗 View Profile</button>
+        </div>
       </div>
     </div>
-  </div>
-</div>
 
-<div class="todays-picks">
-  <h2>Today's Picks</h2>
-</div>
+    <!-- Today's Picks -->
+    <div class="picks-wrapper">
+      <h2 class="section-title">Today's Picks</h2>
+      <div class="embeds-grid">
+        <div class="embed-card">
+          <!-- example embed card -->
+          <div style="height:140px; display:flex;align-items:center;justify-content:center;color:#cfcfcf;">Embed / Post 1</div>
+        </div>
+        <div class="embed-card">
+          <div style="height:140px; display:flex;align-items:center;justify-content:center;color:#cfcfcf;">Embed / Post 2</div>
+        </div>
+        <div class="embed-card">
+          <div style="height:140px; display:flex;align-items:center;justify-content:center;color:#cfcfcf;">Embed / Post 3</div>
+        </div>
+      </div>
+    </div>
+  </main>
 
+  <!-- no extra scripts required for hover-card to work -->
 </body>
 </html>
