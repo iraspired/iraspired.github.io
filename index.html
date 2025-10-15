@@ -18,19 +18,24 @@
       padding: 0;
     }
 
-    /* --- HEADER --- */
+    /* --- HEADER STYLES --- */
     header {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      padding: 0.4rem 1rem;
       background-color: #1a1a1a;
       border-bottom: 1px solid #2a2a2a;
-      padding: 0.4rem 1rem;
+    }
+
+    .left-section,
+    .center-section,
+    .right-section {
+      display: flex;
+      align-items: center;
     }
 
     .left-section {
-      display: flex;
-      align-items: center;
       gap: 0.8rem;
     }
 
@@ -41,28 +46,28 @@
     }
 
     .roblox-logo {
-      width: 26px;
-      height: 26px;
+      width: 25px;
+      height: 25px;
     }
 
     .center-section {
       display: flex;
       align-items: center;
-      flex: 1;
       justify-content: center;
-      gap: 2rem;
+      gap: 1.5rem;
+      flex: 1;
     }
 
     .center-section a {
       text-decoration: none;
-      color: #ddd;
+      color: #fff;
       font-size: 1rem;
       font-weight: 500;
-      transition: color 0.2s;
+      transition: color 0.2s ease;
     }
 
     .center-section a:hover {
-      color: #fff;
+      color: #00b3ff;
     }
 
     .search-container {
@@ -78,7 +83,7 @@
       border: none;
       color: #fff;
       outline: none;
-      width: 160px;
+      width: 200px;
       font-size: 0.9rem;
     }
 
@@ -90,8 +95,6 @@
     }
 
     .right-section {
-      display: flex;
-      align-items: center;
       gap: 1rem;
     }
 
@@ -108,46 +111,92 @@
       opacity: 1;
     }
 
-    /* --- MAIN CONTENT --- */
+    /* --- SECTION TITLES --- */
     .section-title {
-      margin: 1rem 2rem 0.6rem 2rem;
-      font-size: 1.3rem;
+      margin: 1.5rem 2rem 0.5rem 2rem;
+      font-size: 1.5rem;
       font-weight: 600;
     }
 
+    /* --- CONNECTIONS SECTION --- */
     .connections {
       display: flex;
-      gap: 1rem;
+      gap: 1.5rem;
       overflow-x: auto;
-      padding: 0.5rem 2rem 1rem 2rem;
+      padding: 1rem 2rem 2rem 2rem;
     }
 
-    .connections a {
-      text-decoration: none;
-      color: #fff;
+    .connection {
+      position: relative;
       text-align: center;
+      color: white;
+      transition: transform 0.2s ease;
     }
 
-    .connections img {
-      width: 70px;
-      height: 70px;
+    .connection:hover {
+      transform: scale(1.05);
+    }
+
+    .connection img {
+      width: 80px;
+      height: 80px;
       border-radius: 50%;
       border: 3px solid #2b2b2b;
       object-fit: cover;
       transition: 0.3s;
     }
 
-    .connections img:hover {
-      transform: scale(1.1);
-      border-color: #00ff90;
-    }
-
-    .connections span {
+    .connection span {
       display: block;
       font-size: 0.9rem;
-      margin-top: 0.5rem;
+      margin-top: 0.4rem;
     }
 
+    /* --- Hover Card --- */
+    .hover-card {
+      position: absolute;
+      top: 110%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 8px;
+      width: 160px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+      padding: 0.5rem 0;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease, transform 0.25s ease;
+      transform-origin: top;
+    }
+
+    .connection:hover .hover-card {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(-50%) translateY(5px);
+    }
+
+    .hover-card button {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      width: 100%;
+      background: transparent;
+      border: none;
+      color: #ccc;
+      font-size: 0.9rem;
+      padding: 0.5rem 1rem;
+      text-align: left;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .hover-card button:hover {
+      background: #2a2a2a;
+      color: #fff;
+    }
+
+    /* --- EMBEDS SECTION --- */
     .embeds {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -172,13 +221,14 @@
     <div class="left-section">
       <div class="hamburger">☰</div>
       <img src="https://raw.githubusercontent.com/iraspired/iraspired.github.io/refs/heads/main/davey%20blox%20logo%20(1).png" class="roblox-logo" alt="Daveyblox Logo">
-      <a href="#">Charts</a>
-      <a href="#">Marketplace</a>
-      <a href="#">Create</a>
-      <a href="#">Robux</a>
     </div>
 
     <div class="center-section">
+      <a href="#">Charts</a>
+      <a href="#">Marketplace</a>
+      <a href="#">Create</a>
+      <a href="#">Balance</a>
+
       <div class="search-container">
         <svg xmlns="http://www.w3.org/2000/svg" 
           viewBox="0 0 24 24" 
@@ -205,18 +255,35 @@
   <section>
     <h2 class="section-title">Connections</h2>
     <div class="connections">
-      <a href="https://x.com/parodybaszucki" target="_blank">
+      <div class="connection">
         <img src="https://pbs.twimg.com/profile_images/1977007667479543808/20AQn_27_400x400.jpg" alt="Davey Baszucki" />
         <span>Davey Baszucki</span>
-      </a>
-      <a href="https://x.com/parodykaufman" target="_blank">
+        <div class="hover-card">
+          <button onclick="window.open('https://x.com/parodybaszucki', '_blank')">
+            🔗 View Profile
+          </button>
+        </div>
+      </div>
+
+      <div class="connection">
         <img src="https://pbs.twimg.com/profile_images/1977045376369635329/YIlgyqR__400x400.jpg" alt="Matty Kaufman" />
         <span>Matty Kaufman</span>
-      </a>
-      <a href="https://x.com/daveyarchive" target="_blank">
+        <div class="hover-card">
+          <button onclick="window.open('https://x.com/parodykaufman', '_blank')">
+            🔗 View Profile
+          </button>
+        </div>
+      </div>
+
+      <div class="connection">
         <img src="https://pbs.twimg.com/profile_images/1977702490742079488/d1eQ-M_V_400x400.jpg" alt="Davey Baszucki Archive" />
         <span>Davey Baszucki Archive</span>
-      </a>
+        <div class="hover-card">
+          <button onclick="window.open('https://x.com/daveyarchive', '_blank')">
+            🔗 View Profile
+          </button>
+        </div>
+      </div>
     </div>
   </section>
 
