@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calculator</title>
+
+    <!-- iOS "Add to Home Screen" Specific Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Calc Random" />
+    <link rel="apple-touch-icon" href="/calc/icon.png" />
+    <!-- You might want multiple sizes for different devices for production:
+         <link rel="apple-touch-icon" sizes="180x180" href="icon-180x180.png">
+         <link rel="apple-touch-icon" sizes="167x167" href="icon-167x167.png">
+         <link rel="apple-touch-icon" sizes="152x152" href="icon-152x152.png">
+         <link rel="apple-touch-icon" sizes="120x120" href="icon-120x120.png">
+    -->
+
+    <!-- For Android/Chrome -->
+    <meta name="theme-color" content="#000000" />
+    <link rel="manifest" href="manifest.json" />
+    <!-- You'd need to create a manifest.json file for full Android PWA support -->
+
+    <style>
+      /* General Reset and Body Styles */
+      body {
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background-color: #333; /* Dark background for the calculator */
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Helvetica, Arial, sans-serif;
+        overflow: hidden; /* Prevent scrolling */
+      }
+
+      /* Calculator Container */
+      .calculator {
+        width: 100%;
+        max-width: 350px; /* Typical iPhone width */
+        background-color: #000;
+        border-radius: 30px; /* Rounded corners for the entire calculator */
+        overflow: hidden; /* Ensures buttons don't spill out */
+        box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.5); /* Subtle shadow */
+        display: flex;
+        flex-direction: column;
+        padding: 15px; /* Inner padding */
+      }
+
+      /* Display Area */
+      .display {
+        color: #fff;
+        font-size: 5.5rem; /* Larger font size */
+        text-align: right;
+        padding: 20px 10px;
+        min-height: 100px;
+        display: flex;
+        align-items: flex-end; /* Align text to the bottom */
+        justify-content: flex-end;
+        word-break: break-all; /* Prevent overflow of long numbers */
+        overflow: hidden;
+        position: relative;
+        top: -10px; /* Adjust slightly up */
+      }
+
+      /* Button Grid */
+      .buttons {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px; /* Spacing between buttons */
+        padding-bottom: 10px;
+      }
+
+      /* Base Button Style */
+      button {
+        border: none;
+        border-radius: 50%; /* Make buttons circular */
+        width: 75px; /* Standard button size */
+        height: 75px; /* Standard button size */
+        font-size: 2.2rem; /* Larger font for button text */
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        outline: none;
+        transition: background-color 0.1s ease, transform 0.05s ease;
+        -webkit-tap-highlight-color: transparent; /* Remove blue highlight */
+      }
+
+      /* Button Colors */
+      .button-dark-grey {
+        background-color: #333333;
+        color: #fff;
+      }
+
+      .button-grey {
+        background-color: #a5a5a5;
+        color: #000;
+      }
+
+      .button-orange {
+        background-color: #ff9f0a;
+        color: #fff;
+      }
+
+      /* Zero Button (wider) */
+      .zero {
+        grid-column: span 2; /* Make the zero button span two columns */
+        border-radius: 37.5px; /* Half of its height for pill shape */
+        justify-content: flex-start; /* Align text to the left */
+        padding-left: 28px;
+        width: unset; /* Remove fixed width to allow grid-column span */
+      }
+
+      /* Active States (Button Press) */
+      button:active {
+        transform: scale(0.95);
+        filter: brightness(120%); /* Slight brightness on press */
+      }
+
+      .button-orange:active {
+        filter: brightness(120%);
+      }
+
+      /* Media Queries for Responsiveness */
+      @media (max-width: 400px) {
+        .calculator {
+          width: 95%; /* Make it take up more width on smaller screens */
+          border-radius: 20px;
+          padding: 10px;
+        }
+
+        .display {
+          font-size: 4.5rem; /* Slightly smaller font for display */
+          padding: 15px 10px;
+          min-height: 80px;
+        }
+
+        button {
+          width: 65px;
+          height: 65px;
+          font-size: 2rem;
+          gap: 10px;
+        }
+
+        .zero {
+          border-radius: 32.5px; /* Adjust for smaller height */
+          padding-left: 20px;
+        }
+      }
+
+      @media (max-width: 320px) {
+        /* Even smaller devices like iPhone SE (1st Gen) */
+        .calculator {
+          width: 98%;
+          border-radius: 15px;
+          padding: 5px;
+        }
+
+        .display {
+          font-size: 3.8rem;
+          padding: 10px 5px;
+          min-height: 70px;
+        }
+
+        button {
+          width: 58px;
+          height: 58px;
+          font-size: 1.8rem;
+          gap: 8px;
+        }
+
+        .zero {
+          border-radius: 29px;
+          padding-left: 18px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="calculator">
+      <div class="display">0</div>
+      <div class="buttons">
+        <!-- Row 1 -->
+        <button class="button-grey function" data-value="ac">AC</button>
+        <button class="button-grey function" data-value="neg">+/-</button>
+        <button class="button-grey function" data-value="percent">%</button>
+        <button class="button-orange operator" data-value="/">÷</button>
+
+        <!-- Row 2 -->
+        <button class="button-dark-grey number" data-value="7">7</button>
+        <button class="button-dark-grey number" data-value="8">8</button>
+        <button class="button-dark-grey number" data-value="9">9</button>
+        <button class="button-orange operator" data-value="*">×</button>
+
+        <!-- Row 3 -->
+        <button class="button-dark-grey number" data-value="4">4</button>
+        <button class="button-dark-grey number" data-value="5">5</button>
+        <button class="button-dark-grey number" data-value="6">6</button>
+        <button class="button-orange operator" data-value="-">-</button>
+
+        <!-- Row 4 -->
+        <button class="button-dark-grey number" data-value="1">1</button>
+        <button class="button-dark-grey number" data-value="2">2</button>
+        <button class="button-dark-grey number" data-value="3">3</button>
+        <button class="button-orange operator" data-value="+">+</button>
+
+        <!-- Row 5 -->
+        <button class="button-dark-grey number zero" data-value="0">0</button>
+        <button class="button-dark-grey number" data-value=".">.</button>
+        <button class="button-orange operator" data-value="=">=</button>
+      </div>
+    </div>
+
+    <script>
+      const display = document.querySelector(".display");
+      const buttons = document.querySelectorAll(".buttons button");
+      const numberButtons = document.querySelectorAll(".number");
+
+      let currentInput = "0";
+      let firstOperand = null;
+      let operator = null;
+      let waitingForSecondOperand = false;
+
+      // Function to update the display
+      function updateDisplay() {
+        display.textContent = currentInput;
+        // Shrink font for very long numbers
+        if (currentInput.length > 9) {
+          display.style.fontSize = "3.5rem";
+        } else if (currentInput.length > 6) {
+          display.style.fontSize = "4.5rem";
+        } else {
+          display.style.fontSize = "5.5rem"; // Default size
+        }
+      }
+
+      // Function to shuffle an array (Fisher-Yates)
+      function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [array[i], array[j]] = [array[j], array[i]]; // Swap elements
+        }
+      }
+
+      // Function to randomize number button values
+      function randomizeNumbers() {
+        // We only want to randomize actual numbers and the decimal point
+        const valuesToShuffle = [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+          ".",
+        ];
+        shuffleArray(valuesToShuffle);
+
+        let valueIndex = 0;
+        numberButtons.forEach((button) => {
+          // Ensure we are only targetting buttons explicitly marked as 'number'
+          // and the decimal point (which has class 'number')
+          if (button.classList.contains("number")) {
+            button.textContent = valuesToShuffle[valueIndex];
+            button.dataset.value = valuesToShuffle[valueIndex];
+            valueIndex++;
+          }
+        });
+      }
+
+      // Initial display update
+      updateDisplay();
+
+      buttons.forEach((button) => {
+        button.addEventListener("click", () => {
+          const value = button.dataset.value;
+
+          if (button.classList.contains("number")) {
+            randomizeNumbers(); // RANDOMIZE NUMBERS ON NUMBER CLICK!
+
+            if (waitingForSecondOperand) {
+              currentInput = value;
+              waitingForSecondOperand = false;
+            } else {
+              currentInput = currentInput === "0" ? value : currentInput + value;
+            }
+          } else if (button.classList.contains("operator")) {
+            handleOperator(value);
+          } else if (button.classList.contains("function")) {
+            handleFunction(value);
+          }
+          updateDisplay();
+        });
+      });
+
+      // --- Basic Calculator Logic (will be visually disrupted by randomization) ---
+
+      function handleOperator(nextOperator) {
+        const inputValue = parseFloat(currentInput);
+
+        if (operator && waitingForSecondOperand) {
+          operator = nextOperator;
+          return;
+        }
+
+        if (firstOperand === null) {
+          firstOperand = inputValue;
+        } else if (operator) {
+          const result = operate(firstOperand, inputValue, operator);
+          currentInput = String(result);
+          firstOperand = result;
+        }
+
+        waitingForSecondOperand = true;
+        operator = nextOperator;
+      }
+
+      function handleFunction(func) {
+        if (func === "ac") {
+          currentInput = "0";
+          firstOperand = null;
+          operator = null;
+          waitingForSecondOperand = false;
+        } else if (func === "neg") {
+          currentInput = String(parseFloat(currentInput) * -1);
+        } else if (func === "percent") {
+          currentInput = String(parseFloat(currentInput) / 100);
+        }
+      }
+
+      function operate(num1, num2, op) {
+        if (op === "+") return num1 + num2;
+        if (op === "-") return num1 - num2;
+        if (op === "*") return num1 * num2;
+        if (op === "/") return num1 / num2;
+        return num2; // For '=' without a previous operator
+      }
+    </script>
+  </body>
+</html>
