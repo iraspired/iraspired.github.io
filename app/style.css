@@ -1,0 +1,197 @@
+:root {
+  --primary-bg-gradient: linear-gradient(to top, #30cfd0 0%, #330867 100%);
+  --text-color: #ffffff;
+  --navbar-bg: rgba(255, 255, 255, 0.1);
+  --navbar-item-color: rgba(255, 255, 255, 0.7);
+  --navbar-item-active-color: #ffffff;
+}
+
+body {
+  margin: 0;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif,
+    "Apple Color Emoji",
+    "Segoe UI Emoji",
+    "Segoe UI Symbol";
+  overflow: hidden; /* Prevent scrolling on body */
+  background: var(--primary-bg-gradient);
+  color: var(--text-color);
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.app-container {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 60px; /* Space for the navbar */
+  overflow-y: auto; /* Allow content to scroll if it overflows */
+}
+
+.content {
+  text-align: center;
+  width: 100%;
+  max-width: 400px; /* Max width for content on larger screens */
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.hidden {
+  display: none;
+}
+
+/* Home Screen Specifics */
+#homeScreen {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%; /* Take full height of app-container */
+}
+
+.time-display {
+  font-size: 4em; /* Larger for time */
+  font-weight: 200;
+  margin-bottom: 10px;
+}
+
+.day-indicator {
+  font-size: 1.5em;
+  font-weight: 300;
+  opacity: 0.8;
+}
+
+/* Navbar Styling */
+.navbar {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 50px; /* Standard iOS tab bar height */
+  background: var(--navbar-bg);
+  backdrop-filter: blur(10px); /* Frosted glass effect */
+  -webkit-backdrop-filter: blur(10px); /* For Safari */
+  border-top: 0.5px solid rgba(255, 255, 255, 0.1);
+  z-index: 1000;
+}
+
+.nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  color: var(--navbar-item-color);
+  font-size: 0.7em; /* Smaller text for nav items */
+  transition: color 0.3s ease;
+  -webkit-tap-highlight-color: transparent; /* Remove tap highlight on iOS */
+}
+
+.nav-item i {
+  font-size: 1.2em; /* Icon size */
+  margin-bottom: 3px;
+}
+
+.nav-item.active {
+  color: var(--navbar-item-active-color);
+}
+
+/* Settings Screen Styling */
+#settingsScreen h2 {
+  font-size: 1.8em;
+  font-weight: 500;
+  margin-bottom: 30px;
+}
+
+.theme-selector {
+  margin-top: 20px;
+}
+
+.theme-selector h3 {
+  font-size: 1.2em;
+  font-weight: 400;
+  margin-bottom: 15px;
+  opacity: 0.9;
+}
+
+.gradient-options {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+  padding: 10px 0;
+}
+
+.gradient-option {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px; /* Rounded corners */
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.gradient-option:hover {
+  transform: translateY(-2px);
+}
+
+.gradient-option.selected {
+  border-color: #ffffff; /* Highlight selected theme */
+  transform: scale(1.05);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* General Content Styling */
+h2 {
+  font-size: 2em;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+p {
+  font-size: 1.1em;
+  line-height: 1.6;
+  opacity: 0.9;
+}
+
+/* Responsive Adjustments for smaller screens (e.g., iPhone SE) */
+@media (max-width: 375px) {
+  .time-display {
+    font-size: 3.5em;
+  }
+  .day-indicator {
+    font-size: 1.3em;
+  }
+  .nav-item {
+    font-size: 0.65em;
+  }
+  .nav-item i {
+    font-size: 1.1em;
+  }
+  .navbar {
+    height: 48px;
+  }
+  .gradient-option {
+    width: 55px;
+    height: 55px;
+    border-radius: 10px;
+  }
+}
